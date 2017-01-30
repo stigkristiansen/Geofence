@@ -80,6 +80,8 @@ class GeofenceController extends IPSModule {
 				
 		if (array_key_exists('uid', $_GET))
 			$userId=strtolower($_GET['uid']);
+		elseif (array_key_exists('id', $_GET))
+			$userId=strtolower($_GET['id']);
 		
 		if($cmd!="" && $userId!="") {
 			$log->LogMessage("Received the command \"".$cmd."\" for user \"".IPS_GetName($userId)."\"");
