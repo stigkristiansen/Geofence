@@ -75,6 +75,8 @@ class GeofenceController extends IPSModule {
 		$cmd="";
 		$userId="";
 		
+		$log->LogMessage(print_r($_GET, true));
+		
 		if (array_key_exists('cmd', $_GET))
 			$cmd=strtolower($_GET['cmd']);
 				
