@@ -207,7 +207,7 @@ class GeofenceController extends IPSModule {
 		$this->Unlock("HandleWebData");
     }
 	
-	public function UnregisterUser($Username) {
+	public function UnregisterUser(string $Username) {
 		$ident = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $Username));
 		$id = IPS_GetObjectIDByIdent($ident, $this->InstanceID);
 		if($id!==false) {
@@ -228,7 +228,7 @@ class GeofenceController extends IPSModule {
 		return false;
 	}
 
-	public function RegisterUser($Username) {
+	public function RegisterUser(string $Username) {
 		$ident = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $Username));
 		$id = IPS_GetObjectIDByIdent($ident, $this->InstanceID);
 		if($id===false) {
