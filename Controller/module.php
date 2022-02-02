@@ -82,6 +82,7 @@ class GeofenceController extends IPSModule {
 						IPS_SetProperty($user['InstanceId'], 'Enabled', $user['Enabled']);
 						IPS_ApplyChanges();
 					}
+					
 				}
 			}
 		}
