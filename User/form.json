@@ -1,4 +1,8 @@
 {
+    "elements": 
+    [
+        {"type": "Checkbox", "name": "Enabled", "label": "Enabled"}
+    ],
     "actions":
     [
         {"type": "Label", "label": "Show URL and parameters" },
