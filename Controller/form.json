@@ -1,29 +1,49 @@
 {
     "elements":
     [
-		{  
-			"type" :  "ColumnLayout" , 
+		{ 
+			"type" :  "ExpansionPanel" , 
+			"caption" :  "Authentication" , 
+			"expanded" : true,
 			"items" :  [ 
-				{ "type": "Label", "label": "Web Authentication" },
 				{  
 					"type" :  "RowLayout" , 
 					"items" :  [ 
 						{ "name": "Username", "type": "ValidationTextBox", "caption": "Username:" },
 						{ "name": "Password", "type": "PasswordTextBox", "caption": "Password:" }
 					]
-				},
-				{ "type": "Label", "label": "Scripts" },
+				}
+			] 
+		},
+		{ 
+			"type" :  "ExpansionPanel" , 
+			"caption" :  "" , 
+			"expanded" : true,
+			"items" :  [ 
 				{  
 					"type" :  "RowLayout" , 
 					"items" :  [ 
-						{ "type": "Label", "label": "Arrival #1" },
+					]
+				}
+			] 
+		},
+		{ 
+			"type" :  "ExpansionPanel" , 
+			"caption" :  "Events" , 
+			"expanded" : true,
+			"items" :  [ 
+				{ "type": "Label", "label": "Arrival #1" },
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
 						{ "type": "SelectScript", "name": "ArrivalScript1", "caption": "Script:" },
 						{ "type": "CheckBox", "name": "ArrivalScript1Update", "caption": "Update Presence" }
 					]
 				}
-			]
+			] 
 		},
-	
+		
+		
 		{ "type": "Label", "label": "Arrival #2" },
 		{ "type": "SelectScript", "name": "ArrivalScript2", "caption": "Script:" },
 		{ "type": "CheckBox", "name": "ArrivalScript2Update", "caption": "Update Presence" },
