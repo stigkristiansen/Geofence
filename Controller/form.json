@@ -59,6 +59,7 @@
 					"caption": " ",
 					"add": true,
 					"delete": true,
+					"loadValuesFromConfiguration": false,
 					"columns": [
 						{
 							"caption": "Username",
