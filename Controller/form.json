@@ -20,7 +20,7 @@
 			"caption" :  "Event Configuration" , 
 			"expanded" : true,
 			"items" :  [
-				{ "type": "Label", "label": "Arrival #1:" },
+				{ "type": "Label", "bold": true, "label": "Arrival #1:" },
 				{  
 					"type" :  "RowLayout" , 
 					"items" :  [ 
@@ -28,7 +28,7 @@
 						{ "type": "CheckBox", "name": "ArrivalScript1Update", "caption": "Update Presence" }
 					]
 				},
-				{ "type": "Label", "label": "Arrival #2:" },
+				{ "type": "Label", "bold": true, "label": "Arrival #2:" },
 				{  
 					"type" :  "RowLayout" , 
 					"items" :  [ 
@@ -36,7 +36,7 @@
 						{ "type": "CheckBox", "name": "ArrivalScript2Update", "caption": "Update Presence" }
 					]
 				},
-				{ "type": "Label", "label": "Departure #1:" },
+				{ "type": "Label", "bold": true, "label": "Departure #1:" },
 				{  
 					"type" :  "RowLayout" , 
 					"items" :  [ 
@@ -44,7 +44,7 @@
 						{ "type": "CheckBox", "name": "DepartureScript1Update", "caption": "Update Presence" }				
 					]
 				},
-				{ "type": "Label", "label": "Departure #2:" },
+				{ "type": "Label", "bold": true, "label": "Departure #2:" },
 				{  
 					"type" :  "RowLayout" , 
 					"items" :  [ 
@@ -52,7 +52,7 @@
 						{ "type": "CheckBox", "name": "DepartureScript2Update", "caption": "Update Presence" }
 					]
 				},
-				{ "type": "Label", "label": "Users:" },
+				{ "type": "Label", "bold": true,"label": "Users:" },
 				{
 					"type": "List",
 					"name": "Users",
