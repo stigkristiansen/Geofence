@@ -5,6 +5,11 @@ require_once(__DIR__ . "/../logging.php");
 class GeofenceController extends IPSModule {
     
     public function Create(){
+		$count = count(IPS_GetInstanceListByModuleID('{C5271BF2-DDC9-4EA7-8467-A8C645500263}'));
+		if($count>0) {
+			throw new Exeption('The Geofence Controller already exists!');
+		}
+
         parent::Create();
         
         $this->RegisterPropertyBoolean ("Log", false );
@@ -26,13 +31,12 @@ class GeofenceController extends IPSModule {
 		
 		$ident="geofence".$this->InstanceID;
 		$name="Geofence".$this->InstanceID."Hook";
-		$id = $this->RegisterScript($ident, $name, "<?\n//Do not modify!\nrequire_once(IPS_GetKernelDirEx().\"scripts/__ipsmodule.inc.php\");\nrequire_once(\"../modules/Geofence/Controller/module.php\");\n(new GeofenceController(".$this->InstanceID."))->HandleWebData();\n?>");
-		$this->RegisterWebHook("/hook/".$ident, $id);
+		$criptId = $this->RegisterScript($ident, $name, "<?\n//Do not modify!\nrequire_once(IPS_GetKernelDirEx().\"scripts/__ipsmodule.inc.php\");\nrequire_once(\"../modules/Geofence/Controller/module.php\");\n(new GeofenceController(".$this->InstanceID."))->HandleWebData();\n?>");
+		$this->RegisterWebHook("/hook/".$ident, $scriptId);
 		
 		$this->CreateVariable($this->InstanceID, "Presence", "Presence", 0, "~Presence");
 		$this->EnableAction("Presence");
 		
-		//$this->CreateVariable($this->InstanceID, "Delay", "Delay", 1, "");
     }
 
 	public  function GetConfigurationForm ( )  { 

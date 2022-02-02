@@ -1,6 +1,5 @@
-<?
+<?php
 
-require_once(__DIR__ . "/../logging.php");
 
 class GeofenceUser extends IPSModule {
     
@@ -48,4 +47,4 @@ class GeofenceUser extends IPSModule {
 	
 }
 
-?>
+
