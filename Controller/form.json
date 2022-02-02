@@ -54,13 +54,32 @@
 				}
 			] 
 		},
-		{ 
-			"type" :  "Configurator" , 
-			"name" :  "Configuration" , 
-			"caption" :  "Users" , 
-			"delete" :  true 
-
-		}
+		{
+            "type": "ExpansionPanel",
+            "caption": "Users",
+            "expanded": true,
+            "items": [
+                {
+                    "type": "List",
+                    "name": "Users",
+                    "caption": "Users",
+                    "add": true,
+                    "delete": true,
+                    "columns": [
+                        {
+                            "caption": "Username",
+                            "name": "Username", 
+                            "width": "200px",
+                            "add": "<Username>",
+                            "edit": {
+                                "type": "ValidationTextBox"
+                            }
+                        } 
+                    ],
+                    "values": []
+                }
+            ]
+        }
     ]
 
 }
