@@ -42,7 +42,7 @@ class GeofenceController extends IPSModule {
 
 		$users = [];
 		foreach($userInstanceIds as $userInstanceId) {
-			$users[] = ["Username" => IPS_GetName($userInstanceId), "Enabled" = > IPS_GetProperty($userInstanceId, 'Enabled'), "InstanceId" => $userInstanceId];
+			$users[] = ['Username' => IPS_GetName($userInstanceId), 'Enabled' => IPS_GetProperty($userInstanceId, 'Enabled'), 'InstanceId' => $userInstanceId];
 		}
 
 		$form['elements'][1]['items'][9]['values'] = $users;
