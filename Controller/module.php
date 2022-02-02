@@ -5,10 +5,11 @@ require_once(__DIR__ . "/../logging.php");
 class GeofenceController extends IPSModule {
     
     public function Create(){
-		$instances = IPS_GetInstanceListByModuleID('{C5271BF2-DDC9-4EA7-8467-A8C645500263}');
-		$count = count($instances);
+		$count = count(IPS_GetInstanceListByModuleID('{C5271BF2-DDC9-4EA7-8467-A8C645500263}'));
 		if($count==2) {
-			throw new Exception('The Geofence Controller already exists!');
+			//throw new Exception('The Geofence Controller already exists!');
+			echo 'The Geofence Controller already exists!';
+			return;
 		}
 
         parent::Create();
@@ -25,6 +26,8 @@ class GeofenceController extends IPSModule {
 		$this->RegisterPropertyBoolean("ArrivalScript2Update", false);
 		$this->RegisterPropertyBoolean("DepartureScript1Update", false);
 		$this->RegisterPropertyBoolean("DepartureScript2Update", false);
+
+		$this->RegisterPropertyString('Users', '');
 	}
 
     public function ApplyChanges(){
@@ -37,13 +40,15 @@ class GeofenceController extends IPSModule {
 		
 		$this->CreateVariable($this->InstanceID, "Presence", "Presence", 0, "~Presence");
 		$this->EnableAction("Presence");
+
+		$this->UpdateUsers();	
 		
     }
 
 	public  function GetConfigurationForm ( )  { 
 		$form = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
 
-		$userInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
+		$userInstanceIds = IPS_GetInstanceListByModuleID('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 
 		$users = [];
 		foreach($userInstanceIds as $userInstanceId) {
@@ -53,6 +58,30 @@ class GeofenceController extends IPSModule {
 		$form['elements'][1]['items'][9]['values'] = $users;
 
 		return json_encode($form);
+	}
+
+	private function UpdateUsers() {
+		$list = $this->ReadPropertyString('Users');
+		if(strlen($list)>0) {
+			$userList = json_decode($list, true);
+			//$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
+
+			foreach($userList as $user) {
+				if($user['InstanceId']==0) {
+					$newUserId = IPS_CreateInstance('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
+					IPS_SetName($newUserId, $user['Username']);
+				} else {
+					$oldName = IPS_GetName($user['InstanceId']);
+					if($oldName!=$user['Username']) {
+						IPS_SetName($user['InstanceId'], $user['Username']);
+					}
+					$enabled = IPS_GetProperty($user['InstanceId'], 'Enabled');
+					if($enabled!=$user['Enabled']) {
+						IPS_SetProperty($user['InstanceId'], 'Enabled', $user['Enabled']);
+					}
+				}
+			}
+		}
 	}
 
     public function HandleWebData() {
