@@ -23,58 +23,53 @@
 				{  
 					"type" :  "RowLayout" , 
 					"items" :  [ 
-						{ "type": "Label", "label": "Arrival #1" },
-						{  
-							"type" :  "RowLayout" , 
-							"items" :  [ 
-								{ "type": "SelectScript", "name": "ArrivalScript1", "caption": "Script:" },
-								{ "type": "CheckBox", "name": "ArrivalScript1Update", "caption": "Update Presence" }
-							]
-						},
-						{ "type": "Label", "label": "Arrival #2" },
-						{  
-							"type" :  "RowLayout" , 
-							"items" :  [ 
-								{ "type": "SelectScript", "name": "ArrivalScript2", "caption": "Script:" },
-								{ "type": "CheckBox", "name": "ArrivalScript2Update", "caption": "Update Presence" }
-							]
-						},
-						{ "type": "Label", "label": "Departure #1" },
-						{  
-							"type" :  "RowLayout" , 
-							"items" :  [ 
-								{ "type": "SelectScript", "name": "DepartureScript1", "caption": "Script:" },
-								{ "type": "CheckBox", "name": "DepartureScript1Update", "caption": "Update Presence" }				
-							]
-						},
-						{ "type": "Label", "label": "Departure #2" },
-						{  
-							"type" :  "RowLayout" , 
-							"items" :  [ 
-								{ "type": "SelectScript", "name": "DepartureScript2", "caption": "Script:" },
-								{ "type": "CheckBox", "name": "DepartureScript2Update", "caption": "Update Presence" }
-							]
-						},
-						{
-							"type": "List",
-							"name": "Users",
-							"caption": "Users",
-							"add": true,
-							"delete": true,
-							"columns": [
-								{
-									"caption": "Username",
-									"name": "Username", 
-									"width": "200px",
-									"add": "<Username>",
-									"edit": {
-										"type": "ValidationTextBox"
-									}
-								} 
-							],
-							"values": []
-						}
+						{ "type": "Label", "label": "Arrival #1:" },
+						{ "type": "SelectScript", "name": "ArrivalScript1", "caption": "Script:" },
+						{ "type": "CheckBox", "name": "ArrivalScript1Update", "caption": "Update Presence" }
 					]
+				},
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
+						{ "type": "Label", "label": "Arrival #2:" },
+						{ "type": "SelectScript", "name": "ArrivalScript2", "caption": "Script:" },
+						{ "type": "CheckBox", "name": "ArrivalScript2Update", "caption": "Update Presence" }
+					]
+				},
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
+						{ "type": "Label", "label": "Departure #1:" },
+						{ "type": "SelectScript", "name": "DepartureScript1", "caption": "Script:" },
+						{ "type": "CheckBox", "name": "DepartureScript1Update", "caption": "Update Presence" }				
+					]
+				},
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
+						{ "type": "Label", "label": "Departure #2:" },
+						{ "type": "SelectScript", "name": "DepartureScript2", "caption": "Script:" },
+						{ "type": "CheckBox", "name": "DepartureScript2Update", "caption": "Update Presence" }
+					]
+				},
+				{
+					"type": "List",
+					"name": "Users",
+					"caption": "Users",
+					"add": true,
+					"delete": true,
+					"columns": [
+						{
+							"caption": "Username",
+							"name": "Username", 
+							"width": "200px",
+							"add": "<Username>",
+							"edit": {
+								"type": "ValidationTextBox"
+							}
+						} 
+					],
+					"values": []
 				}
 			] 
 		}
