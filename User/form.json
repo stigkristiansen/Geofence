@@ -1,7 +1,7 @@
 {
     "elements": 
     [
-        {"type": "Checkbox", "name": "Enabled", "label": "Enabled"}
+        {"type": "CheckBox", "name": "Enabled", "label": "Enabled"}
     ],
     "actions":
     [
