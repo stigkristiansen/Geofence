@@ -71,12 +71,18 @@
 						{
                             "caption": "Enabled",
                             "name": "Enabled",
-                            "width": "50px",
+                            "width": "150px",
                             "add": true,
                             "edit": {
                                 "type": "CheckBox"
                             }
-                        } 
+                        },
+						{
+                            "caption": "Instance Id",
+                            "name": "InstanceId",
+                            "width": "150px",
+                            "add": 0
+                        }  
 					],
 					"values": []
 				}
