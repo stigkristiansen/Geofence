@@ -32,7 +32,7 @@ class GeofenceController extends IPSModule {
 		
 		$ident="geofence".$this->InstanceID;
 		$name="Geofence".$this->InstanceID."Hook";
-		$criptId = $this->RegisterScript($ident, $name, "<?\n//Do not modify!\nrequire_once(IPS_GetKernelDirEx().\"scripts/__ipsmodule.inc.php\");\nrequire_once(\"../modules/Geofence/Controller/module.php\");\n(new GeofenceController(".$this->InstanceID."))->HandleWebData();\n?>");
+		$scriptId = $this->RegisterScript($ident, $name, "<?\n//Do not modify!\nrequire_once(IPS_GetKernelDirEx().\"scripts/__ipsmodule.inc.php\");\nrequire_once(\"../modules/Geofence/Controller/module.php\");\n(new GeofenceController(".$this->InstanceID."))->HandleWebData();\n?>");
 		$this->RegisterWebHook("/hook/".$ident, $scriptId);
 		
 		$this->CreateVariable($this->InstanceID, "Presence", "Presence", 0, "~Presence");
