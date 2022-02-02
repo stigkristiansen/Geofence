@@ -57,7 +57,7 @@ class GeofenceController extends IPSModule {
 
 		$form['elements'][1]['items'][9]['values'] = $users;
 
-		$this->SendDebug(__FUNCTION__, json_encode($form));
+		$this->SendDebug(__FUNCTION__, json_encode($form), 0);
 
 		return json_encode($form);
 	}
