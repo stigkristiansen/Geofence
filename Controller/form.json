@@ -62,12 +62,21 @@
 						{
 							"caption": "Username",
 							"name": "Username", 
-							"width": "200px",
+							"width": "250px",
 							"add": "<Username>",
 							"edit": {
 								"type": "ValidationTextBox"
 							}
-						} 
+						},
+						{
+                            "caption": "Enabled",
+                            "name": "Enabled",
+                            "width": "50px",
+                            "add": true,
+                            "edit": {
+                                "type": "CheckBox"
+                            }
+                        } 
 					],
 					"values": []
 				}
