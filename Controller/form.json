@@ -1,9 +1,19 @@
 {
     "elements":
     [
-		{ "type": "Label", "label": "Web Authentication" },
-		{ "name": "Username", "type": "ValidationTextBox", "caption": "Username:" },
-		{ "name": "Password", "type": "PasswordTextBox", "caption": "Password:" },
+		{  
+			"type" :  "ColumnLayout" , 
+			"items" :  [ 
+				{ "type": "Label", "label": "Web Authentication" },
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
+						{ "name": "Username", "type": "ValidationTextBox", "caption": "Username:" },
+						{ "name": "Password", "type": "PasswordTextBox", "caption": "Password:" }
+					]
+				}
+			]
+		},
 		{ "type": "Label", "label": "Scripts" },
 		{ "type": "Label", "label": "Arrival #1" },
 		{ "type": "SelectScript", "name": "ArrivalScript1", "caption": "Script:" },
