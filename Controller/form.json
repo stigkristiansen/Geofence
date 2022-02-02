@@ -83,7 +83,8 @@
                             "caption": "Instance Id",
                             "name": "InstanceId",
                             "width": "100px",
-                            "add": 0
+                            "add": 0,
+							"save": true
                         }  
 					],
 					"values": []
