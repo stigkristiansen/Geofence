@@ -52,10 +52,11 @@
 						{ "type": "CheckBox", "name": "DepartureScript2Update", "caption": "Update Presence" }
 					]
 				},
+				{ "type": "Label", "label": "Users:" },
 				{
 					"type": "List",
 					"name": "Users",
-					"caption": "Users",
+					"caption": " ",
 					"add": true,
 					"delete": true,
 					"columns": [
