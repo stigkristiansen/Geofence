@@ -7,7 +7,7 @@ class GeofenceController extends IPSModule {
     public function Create(){
 		$instances = IPS_GetInstanceListByModuleID('{C5271BF2-DDC9-4EA7-8467-A8C645500263}');
 		$count = count($instances);
-		if($count>0 && $instances[0]!=$this->InstanceID) {
+		if($count==2) {
 			throw new Exception('The Geofence Controller already exists!');
 		}
 
