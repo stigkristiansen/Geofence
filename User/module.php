@@ -8,7 +8,7 @@ class GeofenceUser extends IPSModule {
         parent::Create();
         
         $this->RegisterPropertyBoolean ("log", false );
-
+		$this->RegisterPropertyBoolean ("Enabled", true);
     
 	}
 

@@ -35,6 +35,22 @@ class GeofenceController extends IPSModule {
 		//$this->CreateVariable($this->InstanceID, "Delay", "Delay", 1, "");
     }
 
+	public  function GetConfigurationForm ( )  { 
+		$form = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
+
+		$userInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
+
+		$users = [];
+		foreach($userInstanceIds as $userInstanceId) {
+			$user = IPS_GetProperty()
+			$users[] = ["Username" => IPS_GetName($userInstanceId), "Enabled" = > IPS_GetProperty($userInstanceId, 'Enabled'), "InstanceId" => $userInstanceId];
+		}
+
+		$form['elements'][1]['items'][9]['values'] = $users;
+
+		return json_encode($form);
+	}
+
     public function HandleWebData() {
 		//IPS_LogMessage("Debug", "Inside HandleWebData");
 		
