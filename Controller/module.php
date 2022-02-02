@@ -42,7 +42,6 @@ class GeofenceController extends IPSModule {
 
 		$users = [];
 		foreach($userInstanceIds as $userInstanceId) {
-			$user = IPS_GetProperty()
 			$users[] = ["Username" => IPS_GetName($userInstanceId), "Enabled" = > IPS_GetProperty($userInstanceId, 'Enabled'), "InstanceId" => $userInstanceId];
 		}
 
