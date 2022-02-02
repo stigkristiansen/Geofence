@@ -17,18 +17,6 @@
 		},
 		{ 
 			"type" :  "ExpansionPanel" , 
-			"caption" :  "" , 
-			"expanded" : true,
-			"items" :  [ 
-				{  
-					"type" :  "RowLayout" , 
-					"items" :  [ 
-					]
-				}
-			] 
-		},
-		{ 
-			"type" :  "ExpansionPanel" , 
 			"caption" :  "Events" , 
 			"expanded" : true,
 			"items" :  [ 
@@ -39,22 +27,40 @@
 						{ "type": "SelectScript", "name": "ArrivalScript1", "caption": "Script:" },
 						{ "type": "CheckBox", "name": "ArrivalScript1Update", "caption": "Update Presence" }
 					]
+				},
+				{ "type": "Label", "label": "Arrival #2" },
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
+						{ "type": "SelectScript", "name": "ArrivalScript2", "caption": "Script:" },
+						{ "type": "CheckBox", "name": "ArrivalScript2Update", "caption": "Update Presence" }
+					]
+				},
+				{ "type": "Label", "label": "Departure #1" },
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
+						{ "type": "SelectScript", "name": "DepartureScript1", "caption": "Script:" },
+						{ "type": "CheckBox", "name": "DepartureScript1Update", "caption": "Update Presence" }				
+					]
+				},
+				{ "type": "Label", "label": "Departure #2" },
+				{  
+					"type" :  "RowLayout" , 
+					"items" :  [ 
+						{ "type": "SelectScript", "name": "DepartureScript2", "caption": "Script:" },
+						{ "type": "CheckBox", "name": "DepartureScript2Update", "caption": "Update Presence" }
+					]
 				}
 			] 
 		},
-		
-		
-		{ "type": "Label", "label": "Arrival #2" },
-		{ "type": "SelectScript", "name": "ArrivalScript2", "caption": "Script:" },
-		{ "type": "CheckBox", "name": "ArrivalScript2Update", "caption": "Update Presence" },
-		{ "type": "Label", "label": "Departure #1" },
-		{ "type": "SelectScript", "name": "DepartureScript1", "caption": "Script:" },
-		{ "type": "CheckBox", "name": "DepartureScript1Update", "caption": "Update Presence" },
-		{ "type": "Label", "label": "Departure #2" },
-		{ "type": "SelectScript", "name": "DepartureScript2", "caption": "Script:" },
-		{ "type": "CheckBox", "name": "DepartureScript2Update", "caption": "Update Presence" },
-		{ "type": "Label", "label": "Other settings" },
-		{ "type": "CheckBox", "name": "Log", "caption": "Enable logging:" }
+		{ 
+			"type" :  "Configurator" , 
+			"name" :  "Configuration" , 
+			"caption" :  "Users" , 
+			"delete" :  true 
+
+		}
     ]
 
 }
