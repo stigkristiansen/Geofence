@@ -151,7 +151,7 @@ class GeofenceController extends IPSModule {
 		$cmd="";
 		$userId="";
 		
-		$this->SendDebug(__FUNCTION__, print_r($_GET, true), 0);
+		$this->SendDebug(__FUNCTION__, 'Received the following query parameters: '.json_encode($_GET), 0);
 		
 		if (array_key_exists('cmd', $_GET))
 			$cmd=strtolower($_GET['cmd']);
