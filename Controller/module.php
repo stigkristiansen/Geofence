@@ -39,18 +39,18 @@ class GeofenceController extends IPSModule {
 		$name="Geofence".$this->InstanceID."Hook";
 		$scriptId = $this->RegisterScript($ident, $name, "<?\n//Do not modify!\nrequire_once(IPS_GetKernelDirEx().\"scripts/__ipsmodule.inc.php\");\nrequire_once(\"../modules/Geofence/Controller/module.php\");\n(new GeofenceController(".$this->InstanceID."))->HandleWebData();\n?>");
 		$this->RegisterWebHook("/hook/".$ident, $scriptId);
-		
-		//$this->CreateVariable($this->InstanceID, "Presence", "Presence", 0, "~Presence");
-		
+						
 		$this->UpdateUsers();	
-		
     }
 
 	public  function GetConfigurationForm ( )  { 
+		$this->SendDebug(__FUNCTION__, 'Creating the form...', 0);
+
 		$form = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
 
 		$userInstanceIds = IPS_GetInstanceListByModuleID('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 
+		$this->SendDebug(__FUNCTION__, 'Building users list...', 0);
 		$users = [];
 		foreach($userInstanceIds as $userInstanceId) {
 			$users[] = ['Username' => IPS_GetName($userInstanceId), 'Enabled' => IPS_GetProperty($userInstanceId, 'Enabled'), 'InstanceId' => $userInstanceId];
@@ -58,12 +58,14 @@ class GeofenceController extends IPSModule {
 
 		$form['elements'][1]['items'][9]['values'] = $users;
 
-		//$this->SendDebug(__FUNCTION__, json_encode($form), 0);
+		$this->SendDebug(__FUNCTION__, 'Done crerating form', 0);
 
 		return json_encode($form);
 	}
 
 	private function UpdateUsers() {
+		$this->SendDebug(__FUNCTION__, 'Updating users...', 0);
+
 		$list = $this->ReadPropertyString('Users');
 		if(strlen($list)>0) {
 			$userList = json_decode($list, true);
@@ -73,16 +75,20 @@ class GeofenceController extends IPSModule {
 			
 			foreach($userList as $user) {
 				if($user['InstanceId']==0) {
+					$this->SendDebug(__FUNCTION__, sprintf('Adding new user "%s"...', $user['Username']), 0);
 					$newUserId = IPS_CreateInstance('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 					IPS_SetName($newUserId, $user['Username']);
 					IPS_SetParent($newUserId, $this->InstanceID);
 				} else if(IPS_InstanceExists($user['InstanceId'])){
+					$this->SendDebug(__FUNCTION__, sprintf('Checking existing user with id "%d"...', $user['InstanceId']), 0);
 					$oldName = IPS_GetName($user['InstanceId']);
 					if($oldName!=$user['Username']) {
+						$this->SendDebug(__FUNCTION__, sprintf('Renaming user to "%s"', $user['Username']), 0);
 						IPS_SetName($user['InstanceId'], $user['Username']);
 					}
 					$enabled = IPS_GetProperty($user['InstanceId'], 'Enabled');
 					if($enabled!=$user['Enabled']) {
+						$this->SendDebug(__FUNCTION__, sprintf('Setting "Enabled to "%s"', $user['Enabled']?'true':'false'), 0);
 						IPS_SetProperty($user['InstanceId'], 'Enabled', $user['Enabled']);
 						IPS_ApplyChanges($user['InstanceId']);
 					}
@@ -90,6 +96,7 @@ class GeofenceController extends IPSModule {
 			}
 
 			// Delete!!!!
+			$this->SendDebug(__FUNCTION__, 'Removing unused users...', 0);
 		}
 	}
 
