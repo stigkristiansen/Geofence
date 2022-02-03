@@ -7,7 +7,6 @@ class GeofenceController extends IPSModule {
     public function Create(){
 		$count = count(IPS_GetInstanceListByModuleID('{C5271BF2-DDC9-4EA7-8467-A8C645500263}'));
 		if($count==2) {
-			//throw new Exception('The Geofence Controller already exists!');
 			echo 'The Geofence Controller already exists!';
 			return;
 		}
@@ -57,7 +56,7 @@ class GeofenceController extends IPSModule {
 
 		$form['elements'][1]['items'][9]['values'] = $users;
 
-		$this->SendDebug(__FUNCTION__, json_encode($form), 0);
+		//$this->SendDebug(__FUNCTION__, json_encode($form), 0);
 
 		return json_encode($form);
 	}
@@ -66,12 +65,15 @@ class GeofenceController extends IPSModule {
 		$list = $this->ReadPropertyString('Users');
 		if(strlen($list)>0) {
 			$userList = json_decode($list, true);
-			//$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
-			$this->SendDebug(__FUNCTION__, 'Property Username: '.$list, 0);
+			$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
+			
+			//$this->SendDebug(__FUNCTION__, 'Property Username: '.$list, 0);
+			
 			foreach($userList as $user) {
 				if($user['InstanceId']==0) {
 					$newUserId = IPS_CreateInstance('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 					IPS_SetName($newUserId, $user['Username']);
+					IPS_SetParent($newUserId, $this->InstancedID);
 				} else {
 					$oldName = IPS_GetName($user['InstanceId']);
 					if($oldName!=$user['Username']) {
@@ -82,9 +84,10 @@ class GeofenceController extends IPSModule {
 						IPS_SetProperty($user['InstanceId'], 'Enabled', $user['Enabled']);
 						IPS_ApplyChanges($user['InstanceId']);
 					}
-
 				}
 			}
+
+			// Delete!!!!
 		}
 	}
 
