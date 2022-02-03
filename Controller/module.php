@@ -73,7 +73,7 @@ class GeofenceController extends IPSModule {
 				if($user['InstanceId']==0) {
 					$newUserId = IPS_CreateInstance('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 					IPS_SetName($newUserId, $user['Username']);
-					IPS_SetParent($newUserId, $this->InstanceId);
+					IPS_SetParent($newUserId, $this->InstanceID);
 				} else {
 					$oldName = IPS_GetName($user['InstanceId']);
 					if($oldName!=$user['Username']) {
