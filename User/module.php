@@ -7,16 +7,14 @@ class GeofenceUser extends IPSModule {
         parent::Create();
                 
 		$this->RegisterPropertyBoolean ("Enabled", true);
-    
+
+		$this->RegisterVariableBoolean('Presence', 'Presence', '~Presence');
+		$this->EnableAction("Presence");
 	}
 
     public function ApplyChanges(){
         parent::ApplyChanges();
-		
-		
-		$this->RegisterVariableBoolean( "Presence", "Presence", "~Presence", false );
-		$this->EnableAction("Presence");
-        
+
     }
 
 	public function GetURLs() {
