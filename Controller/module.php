@@ -58,7 +58,7 @@ class GeofenceController extends IPSModule {
 
 		$form['elements'][1]['items'][9]['values'] = $users;
 
-		$this->SendDebug(__FUNCTION__, 'Done crerating form', 0);
+		$this->SendDebug(__FUNCTION__, 'Done creating form', 0);
 
 		return json_encode($form);
 	}
@@ -69,10 +69,7 @@ class GeofenceController extends IPSModule {
 		$list = $this->ReadPropertyString('Users');
 		if(strlen($list)>0) {
 			$userList = json_decode($list, true);
-			$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
-			
-			//$this->SendDebug(__FUNCTION__, 'Property Username: '.$list, 0);
-			
+						
 			foreach($userList as $user) {
 				if($user['InstanceId']==0) {
 					$this->SendDebug(__FUNCTION__, sprintf('Adding new user "%s"...', $user['Username']), 0);
@@ -95,9 +92,30 @@ class GeofenceController extends IPSModule {
 				}
 			}
 
-			// Delete!!!!
 			$this->SendDebug(__FUNCTION__, 'Removing unused users...', 0);
+
+			$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
+
+			foreach($existingUserInstanceIds as $existingUserInstanceId) {
+				$found = false;
+				foreach($userList as $user) {
+					if($user['InstanceId'] == $existingUserInstanceId) {
+						$found = true;
+						break;
+					}
+				}
+
+				if(!$found) {
+					$name = IPS_GetName(($existingUserInstanceId);
+					
+					IPS_DeleteInstance($existingUserInstanceId);
+					
+					$this->SendDebug(__FUNCTION__, sprintf('Removed user "%s"', $name), 0);
+				}
+			}
 		}
+
+		$this->SendDebug(__FUNCTION__, 'Done updating users', 0);
 	}
 
     public function HandleWebData() {
