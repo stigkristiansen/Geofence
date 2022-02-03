@@ -106,7 +106,7 @@ class GeofenceController extends IPSModule {
 				}
 
 				if(!$found) {
-					$name = IPS_GetName(($existingUserInstanceId);
+					$name = IPS_GetName($existingUserInstanceId);
 					
 					IPS_DeleteInstance($existingUserInstanceId);
 					
