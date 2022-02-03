@@ -1,7 +1,5 @@
 <?php
 
-require_once(__DIR__ . "/../logging.php");
-
 class GeofenceController extends IPSModule {
     
     public function Create(){
@@ -13,18 +11,18 @@ class GeofenceController extends IPSModule {
 
         parent::Create();
         
-        $this->RegisterPropertyBoolean ("Log", false );
+        //$this->RegisterPropertyBoolean ("Log", false );
 
-		$this->RegisterPropertyString("Username", "");
-		$this->RegisterPropertyString("Password", "");
-		$this->RegisterPropertyInteger("ArrivalScript1", 0);
-		$this->RegisterPropertyInteger("ArrivalScript2", 0);
-		$this->RegisterPropertyInteger("DepartureScript1", 0);
-		$this->RegisterPropertyInteger("DepartureScript2", 0);
-		$this->RegisterPropertyBoolean("ArrivalScript1Update", false);
-		$this->RegisterPropertyBoolean("ArrivalScript2Update", false);
-		$this->RegisterPropertyBoolean("DepartureScript1Update", false);
-		$this->RegisterPropertyBoolean("DepartureScript2Update", false);
+		$this->RegisterPropertyString('Username', '');
+		$this->RegisterPropertyString('Password', '');
+		$this->RegisterPropertyInteger('ArrivalScript1', 0);
+		$this->RegisterPropertyInteger('ArrivalScript2', 0);
+		$this->RegisterPropertyInteger('DepartureScript1', 0);
+		$this->RegisterPropertyInteger('DepartureScript2', 0);
+		$this->RegisterPropertyBoolean('ArrivalScript1Update', false);
+		$this->RegisterPropertyBoolean('ArrivalScript2Update', false);
+		$this->RegisterPropertyBoolean('DepartureScript1Update', false);
+		$this->RegisterPropertyBoolean('DepartureScript2Update', false);
 
 		$this->RegisterPropertyString('Users', '');
 
@@ -119,15 +117,9 @@ class GeofenceController extends IPSModule {
 	}
 
     public function HandleWebData() {
-		//IPS_LogMessage("Debug", "Inside HandleWebData");
-		
-		$log = new Logging($this->ReadPropertyBoolean("Log"), IPS_Getname($this->InstanceID));
-		
 		$username = IPS_GetProperty($this->InstanceID, "Username");
 		$password = IPS_GetProperty($this->InstanceID, "Password");
-		
-		//IPS_LogMessage("User is ".$username);
-		
+				
 		if($username!="" || $password!="") {
 			if(!isset($_SERVER['PHP_AUTH_USER']))
 				$_SERVER['PHP_AUTH_USER'] = "";
@@ -138,27 +130,28 @@ class GeofenceController extends IPSModule {
 				header('WWW-Authenticate: Basic Realm="Geofence"');
 				header('HTTP/1.0 401 Unauthorized');
 				echo "Authorization required to access Symcon and Geofence";
-				$log->LogMessage("Authentication needed or invalid username/password!");
+				$this->SendDebug(__FUNCTION__, 'Authentication needed or invalid username/password!', 0);
 				return;
 			} else
-				$log->LogMessage("You are authenticated!");
+			$this->SendDebug(__FUNCTION__, 'You are authenticated!', 0);
+				
 		} else
-			$log->LogMessage("No authentication needed");
+		$this->SendDebug(__FUNCTION__, 'No authentication needed', 0);
 		
 		$username="";
 		$password="";
 		
 		if(!$this->Lock("HandleWebData")) {
-			$log->LogMessage("Waiting for unlock timed out!");
+			$this->SendDebug(__FUNCTION__, 'Waiting for unlock timed out!', 0);
 			return;
 		}
 		
-		$log->LogMessage("The controller is locked");
+		$this->SendDebug(__FUNCTION__, 'The controller is locked', 0);
 		
 		$cmd="";
 		$userId="";
 		
-		$log->LogMessage(print_r($_GET, true));
+		$this->SendDebug(__FUNCTION__, print_r($_GET, true), 0);
 		
 		if (array_key_exists('cmd', $_GET))
 			$cmd=strtolower($_GET['cmd']);
@@ -169,11 +162,11 @@ class GeofenceController extends IPSModule {
 			$userId=strtolower($_GET['id']);
 		
 		if($cmd!="" && $userId!="") {
-			$log->LogMessage("Received the command \"".$cmd."\" for user \"".IPS_GetName($userId)."\"");
+			$this->SendDebug(__FUNCTION__, 'Received the command "'.$cmd.'" for user "'.IPS_GetName($userId).'"', 0);
 			
 			$children = IPS_GetChildrenIDs($this->InstanceID);
 			
-			$users=IPS_GetInstanceListByModuleID("{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}");
+			$users=IPS_GetInstanceListByModuleID('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 			$size=sizeof($users);
 			
 			$userExists = false;
@@ -186,24 +179,24 @@ class GeofenceController extends IPSModule {
 			
 			if($userExists) {
 				switch($cmd) {
-					case "arrival1":
+					case 'arrival1':
 						$presence = true;
-						$scriptProperty = "ArrivalScript1";
+						$scriptProperty = 'ArrivalScript1';
 						break;
-					case "arrival2":
+					case 'arrival2':
 						$presence = true;
-						$scriptProperty = "ArrivalScript2";
+						$scriptProperty = 'ArrivalScript2';
 						break;
-					case "departure1":
+					case 'departure1':
 						$presence = false;
-						$scriptProperty = "DepartureScript1";
+						$scriptProperty = 'DepartureScript1';
 						break;
-					case "departure2":
+					case 'departure2':
 						$presence = false;
-						$scriptProperty = "DepartureScript2";
+						$scriptProperty = 'DepartureScript2';
 						break;
 					default:
-						$log->LogMessage("Invalid command!");
+					$this->SendDebug(__FUNCTION__, 'Invalid command!', 0);
 						$this->Unlock("HandleWebData");
 						return;
 				}
@@ -216,7 +209,7 @@ class GeofenceController extends IPSModule {
 				$updatePresence=$this->ReadPropertyBoolean($scriptProperty."Update");
 				
 				if($updatePresence) {
-					$log->LogMessage("Updated Presence for user ".IPS_GetName($userId)." to \"".$this->GetProfileValueName(IPS_GetVariable($presenceId)['VariableProfile'], $presence)."\"");
+					$this->SendDebug(__FUNCTION__, 'Updated Presence for user "'.IPS_GetName($userId).'" to "'.$this->GetProfileValueName(IPS_GetVariable($presenceId)['VariableProfile'], $presence).'"', 0);
 					SetValue($presenceId, $presence);
 				}
 				
@@ -231,30 +224,30 @@ class GeofenceController extends IPSModule {
 				
 				if($updatePresence) {
 					$this->SetValue('Presence', $commonPresence);
-					$log->LogMessage("Updated Common Presence to \"".$this->GetProfileValueName(IPS_GetVariable($commonPresenceId)['VariableProfile'], $commonPresence)."\"");
+					$this->SendDebug(__FUNCTION__, 'Updated Common Presence to "'.$this->GetProfileValueName(IPS_GetVariable($commonPresenceId)['VariableProfile'], $commonPresence).'"', 0);
 				} else
-					$log->LogMessage("Presence update is not enabled for this command.");
+				$this->SendDebug(__FUNCTION__, 'Presence update is not enabled for this command.', 0);
 				
 				$scriptId = $this->ReadPropertyInteger($scriptProperty);
 				if($scriptId>0) { 
-					$log->LogMessage("The script is ".IPS_GetName($scriptId));
+					$this->SendDebug(__FUNCTION__, 'The script is "'.IPS_GetName($scriptId).'"', 0);
 					
 					$runScript = true;
 					if($updatePresence && $presence==$lastCommonPresence) {
 						$runScript = false;
-						$message = "Old Presence and new Presence is equal. Skipping script";
+						$message = 'Old Presence and new Presence is equal. Skipping script';
 					}
 									
 					if($updatePresence && !$presence && $commonPresence) {
 						$runScript = false;
-						$message="Not all users have sent a departure command. Skipping script";
+						$message='Not all users have sent a departure command. Skipping script';
 					}
 					
 					if($runScript) {					
 						if(array_key_exists('delay', $_GET) && is_numeric($_GET['delay'])) {
 							$delay = (int)$_GET['delay'];
 							if($delay>0) {
-								$log->LogMessage("Running script with ".$delay." seconds delay...");
+								$this->SendDebug(__FUNCTION__, 'Running script with '.$delay.' seconds delay...', 0);
 								$scriptContent = IPS_GetScriptContent($scriptId);
 								$scriptModification =  "//Do not modify this line or the line below\nIPS_SetScriptTimer(\$_IPS['SELF'],0);\n//Do not modify this line or the line above\n";
 								if(strripos($scriptContent, $scriptModification)===false) {
@@ -266,25 +259,25 @@ class GeofenceController extends IPSModule {
 								}
 								IPS_SetScriptTimer($scriptId, $delay);
 							} else {
-								$log->LogMessage("Running script...");
+								$this->SendDebug(__FUNCTION__, 'Running script...', 0);
 								IPS_RunScript($scriptId);
 							}
 						} else {
-							$log->LogMessage("Running script...");
+							$this->SendDebug(__FUNCTION__, 'Running script...', 0);
 							IPS_RunScript($scriptId);
 						}
 					} else
-						$log->LogMessage($message);				
+					$this->SendDebug(__FUNCTION__, $message, 0);				
 				} else 
-					$log->LogMessage("No script is selected for this command");
+					$this->SendDebug(__FUNCTION__, 'No script is selected for this command', 0);
 				
 				echo "OK";
 			
 			} else
-				$log->LogMessage("Unknown user");
+			$this->SendDebug(__FUNCTION__, 'Unknown user', 0);
 			
 		} else
-			$log->LogMessage("Invalid or missing \"id\" or \"cmd\" in URL");
+		$this->SendDebug(__FUNCTION__, 'Invalid or missing "id" or "cmd" in URL', 0);
 		
 		$this->Unlock("HandleWebData");
     }
@@ -303,10 +296,10 @@ class GeofenceController extends IPSModule {
 	}
 
     private function RegisterWebHook($Hook, $TargetId) {
-		$id = IPS_GetInstanceListByModuleID("{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}");
+		$id = IPS_GetInstanceListByModuleID('{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}');
 
 		if(sizeof($id)) {
-			$hooks = json_decode(IPS_GetProperty($id[0], "Hooks"), true);
+			$hooks = json_decode(IPS_GetProperty($id[0], 'Hooks'), true);
 
 			$hookExists = false;
 			$numHooks = sizeof($hooks);
@@ -321,34 +314,31 @@ class GeofenceController extends IPSModule {
 			}
 				
 			if(!$hookExists)
-			   $hooks[] = Array("Hook" => $Hook, "TargetID" => $TargetId);
+			   $hooks[] = Array('Hook' => $Hook, 'TargetID' => $TargetId);
 			   
-			IPS_SetProperty($id[0], "Hooks", json_encode($hooks));
+			IPS_SetProperty($id[0], 'Hooks', json_encode($hooks));
 			IPS_ApplyChanges($id[0]);
 		}
     }
 		
 	private function Lock($Ident) {
-        $log = new Logging($this->ReadPropertyBoolean("Log"), IPS_Getname($this->InstanceID));
-		for ($x=0;$x<100;$x++)
-        {
-            if (IPS_SemaphoreEnter("GEO_".(string)$this->InstanceID.(string)$Ident, 1)){
+        for ($x=0;$x<100;$x++) {
+            if (IPS_SemaphoreEnter('GEO_'.(string)$this->InstanceID.(string)$Ident, 1)){
                 return true;
             }
             else {
   				if($x==0)
-					$log->LogMessage("Waiting for controller to unlock...");
+				  	$this->SendDebug(__FUNCTION__, 'Waiting for controller to unlock...', 0);
 				IPS_Sleep(mt_rand(1, 5));
             }
         }
+
         return false;
     }
 
     private function Unlock($Ident) {
-        IPS_SemaphoreLeave("GEO_".(string)$this->InstanceID.(string)$Ident);
-		$log = new Logging($this->ReadPropertyBoolean("Log"), IPS_Getname($this->InstanceID));
-		$log->LogMessage("The controller is unlocked");
+        IPS_SemaphoreLeave('GEO_'.(string)$this->InstanceID.(string)$Ident);
+		$this->SendDebug(__FUNCTION__, 'The controller is unlocked', 0);
     }
-		
 }
 
