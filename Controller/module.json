@@ -2,7 +2,7 @@
     "id" :  "{C5271BF2-DDC9-4EA7-8467-A8C645500263}" , 
     "name" :  "GeofenceController" , 
     "type" :  3 , 
-    "vendor" :  "Geofence" , 
+    "vendor" :  "Stig Kristiansen" , 
     "aliases" : 
     [ 
         "Geofence Controller"  

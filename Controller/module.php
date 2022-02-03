@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once(__DIR__ . "/../logging.php");
 
@@ -263,51 +263,6 @@ class GeofenceController extends IPSModule {
 		
 		$this->Unlock("HandleWebData");
     }
-	
-	/*
-	public function UnregisterUser(string $Username) {
-		$ident = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $Username));
-		$id = IPS_GetObjectIDByIdent($ident, $this->InstanceID);
-		if($id!==false) {
-			$vId = IPS_GetObjectIDByIdent("Presence", $id);
-			if($vId!==false)
-				IPS_DeleteVariable($vId);
-			return IPS_DeleteInstance($id);
-		}
-		
-		$id = IPS_GetInstanceIDByName($Username, $this->InstanceID);
-		if($id!==false) {
-			$vId = IPS_GetObjectIDByName("Presence", $id);
-			if($vId!==false)
-				IPS_DeleteVariable($vId);
-			return IPS_DeleteInstance($id);
-		}
-		
-		return false;
-	}
-
-	public function RegisterUser(string $Username) {
-		$ident = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $Username));
-		$id = IPS_GetObjectIDByIdent($ident, $this->InstanceID);
-		if($id===false) {
-			$id = IPS_GetInstanceIDByName($Username, $this->InstanceID);
-			if($id===false) {
-				$id = IPS_CreateInstance("{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}");
-				IPS_SetName($id,$Username);
-				IPS_SetParent($id,$this->InstanceID);
-				IPS_SetIdent($id, $ident);
-				return true;
-			} else {
-				IPS_SetIdent($id, $ident);
-				
-				return true;
-			}
-		} 
-						
-		return false;
-	}
-	
-	*/
 
 	private function GetProfileValueName($Profile, $Value) {
 		$associations = IPS_GetVariableProfile($Profile)['Associations'];
@@ -348,21 +303,6 @@ class GeofenceController extends IPSModule {
 		}
     }
 		
-	/*
-	private function CreateVariable($Parent, $Ident, $Name, $Type, $Profile = "") {
-		$id = @IPS_GetObjectIDByIdent($Ident, $Parent);
-		if($id === false) {
-			$id = IPS_CreateVariable($Type);
-			IPS_SetParent($id, $Parent);
-			IPS_SetName($id, $Name);
-			IPS_SetIdent($id, $Ident);
-			if($Profile != "")
-				IPS_SetVariableCustomProfile($id, $Profile);
-		}
-		
-		return $id;
-	}
-	*/
 	private function Lock($Ident) {
         $log = new Logging($this->ReadPropertyBoolean("Log"), IPS_Getname($this->InstanceID));
 		for ($x=0;$x<100;$x++)
@@ -387,4 +327,3 @@ class GeofenceController extends IPSModule {
 		
 }
 
-?>
