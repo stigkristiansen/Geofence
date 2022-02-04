@@ -65,10 +65,10 @@ class GeofenceController extends IPSModule {
 		}
 
 		$selectOptions[] = [
-			"caption" => $this->GetProfileValueName(profile, true), 'value' => true
+			"caption" => $this->GetProfileValueName($profile, true), 'value' => true
 		];
 		$selectOptions[] = [
-			"caption" => $this->GetProfileValueName(profile, false), 'value' => false
+			"caption" => $this->GetProfileValueName($profile, false), 'value' => false
 		];
 
 		$form['elements'][1]['items'][9]['columns'][1]['edit']['options'] = $selectOptions;
