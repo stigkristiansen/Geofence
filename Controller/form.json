@@ -64,7 +64,7 @@
 						{
 							"caption": "Username",
 							"name": "Username", 
-							"width": "100px",
+							"width": "125px",
 							"add": "",
 							"edit": {
 								"type": "ValidationTextBox"
