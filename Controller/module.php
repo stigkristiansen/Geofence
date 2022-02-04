@@ -96,7 +96,7 @@ class GeofenceController extends IPSModule {
 			$this->SendDebug(__FUNCTION__, sprintf('Users in list: %s', json_encode($userList)), 0);
 
 			foreach($existingUserInstanceIds as $existingUserInstanceId) {
-				$username = IPS_GetProperty($existingUserInstanceId, 'Username');
+				$username = IPS_GetName($existingUserInstanceId);
 				$found = false;
 				foreach($userList as $user) {
 					if($user['Username'] == $username) {
@@ -106,8 +106,6 @@ class GeofenceController extends IPSModule {
 				}
 
 				if(!$found) {
-					$name = IPS_GetName($existingUserInstanceId);
-
 					$this->SendDebug(__FUNCTION__, sprintf('Removing user "%s"...', $name), 0);
 					
 					IPS_DeleteInstance($existingUserInstanceId);
