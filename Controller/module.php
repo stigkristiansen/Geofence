@@ -79,13 +79,23 @@ class GeofenceController extends IPSModule {
 					$newUserId = IPS_CreateInstance('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 					IPS_SetName($newUserId, $user['Username']);
 					IPS_SetParent($newUserId, $this->InstanceID);
+					$presenceId = IPS_GetObjectIDByIdent('Presence', $newUserId);
+					SetValue($presenceId, $user['Presence']);
 				} else if(IPS_InstanceExists($user['InstanceId'])){
 					$this->SendDebug(__FUNCTION__, sprintf('Checking existing user with id "%d"...', $user['InstanceId']), 0);
+					
+					$presenceId = IPS_GetObjectIDByIdent('Presence', $user['InstanceId']);
+					$oldPresence = GetValue($presenceId);
+					if($oldPresence!=$user['Presence']) {
+						SetValue($presenceId, $user['Presence']);
+					}
+
 					$oldName = IPS_GetName($user['InstanceId']);
 					if($oldName!=$user['Username']) {
 						$this->SendDebug(__FUNCTION__, sprintf('Renaming user to "%s"', $user['Username']), 0);
 						IPS_SetName($user['InstanceId'], $user['Username']);
 					}
+					
 					$enabled = IPS_GetProperty($user['InstanceId'], 'Enabled');
 					if($enabled!=$user['Enabled']) {
 						$this->SendDebug(__FUNCTION__, sprintf('Setting "Enabled to "%s"', $user['Enabled']?'true':'false'), 0);
