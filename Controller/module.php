@@ -87,6 +87,7 @@ class GeofenceController extends IPSModule {
 					$presenceId = IPS_GetObjectIDByIdent('Presence', $user['InstanceId']);
 					$oldPresence = GetValue($presenceId);
 					if($oldPresence!=$user['Presence']) {
+						
 						SetValue($presenceId, $user['Presence']);
 					}
 
