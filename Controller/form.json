@@ -71,6 +71,19 @@
 							}
 						},
 						{
+                            "caption": "Presence",
+                            "name": "Presence",
+                            "width": "50px",
+                            "add": true,
+                            "edit": {
+                                "type": "Select",
+								"Options": [
+									{"caption": "Absent", "value": false},
+									{"caption": "Present", "value": true}
+								]
+                            }
+                        },
+						{
                             "caption": "Enabled",
                             "name": "Enabled",
                             "width": "75px",
