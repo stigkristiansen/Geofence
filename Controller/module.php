@@ -121,7 +121,7 @@ class GeofenceController extends IPSModule {
 	private function Delete(int $ObjectId) {
 		$children = IPS_GetChildrenIDs($ObjectId);
 		foreach($children as $child) {
-			Delete($child);
+			$this->Delete($child);
 		}
 	
 		switch(IPS_GetObject($ObjectId)['ObjectType']) {
