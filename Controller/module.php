@@ -59,8 +59,16 @@ class GeofenceController extends IPSModule {
 					   ];
 		}
 
-		$form['elements'][1]['items'][9]['values'] = $users;
+		$selectOptions[] = [
+			"caption" => $this->GetProfileValueName('~Presence', true), 'value' => true
+		];
+		$selectOptions[] = [
+			"caption" => $this->GetProfileValueName('~Presence', false), 'value' => false
+		];
 
+		$form['elements'][1]['items'][9]['columns'][1]['edit']['options'] = $selectOptions;
+		$form['elements'][1]['items'][9]['values'] = $users;
+		
 		$this->SendDebug(__FUNCTION__, 'Done creating form', 0);
 
 		return json_encode($form);
@@ -87,7 +95,6 @@ class GeofenceController extends IPSModule {
 					$presenceId = IPS_GetObjectIDByIdent('Presence', $user['InstanceId']);
 					$oldPresence = GetValue($presenceId);
 					if($oldPresence!=$user['Presence']) {
-						
 						SetValue($presenceId, $user['Presence']);
 					}
 
