@@ -103,6 +103,8 @@ class GeofenceController extends IPSModule {
 
 				if(!$found) {
 					$name = IPS_GetName($existingUserInstanceId);
+
+					$this->SendDebug(__FUNCTION__, sprintf('Removing user "%s"...', $name), 0);
 					
 					IPS_DeleteInstance($existingUserInstanceId);
 					
