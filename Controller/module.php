@@ -59,11 +59,16 @@ class GeofenceController extends IPSModule {
 					   ];
 		}
 
+		$profile = IPS_GetVariable($this->GetIDForIdent('Presence'))['VariableCustomProfile'];
+		if(strlen($profile)==0) {
+			$profile = IPS_GetVariable($this->GetIDForIdent('Presence'))['VariableProfile'];
+		}
+
 		$selectOptions[] = [
-			"caption" => $this->GetProfileValueName('~Presence', true), 'value' => true
+			"caption" => $this->GetProfileValueName(profile, true), 'value' => true
 		];
 		$selectOptions[] = [
-			"caption" => $this->GetProfileValueName('~Presence', false), 'value' => false
+			"caption" => $this->GetProfileValueName(profile, false), 'value' => false
 		];
 
 		$form['elements'][1]['items'][9]['columns'][1]['edit']['options'] = $selectOptions;

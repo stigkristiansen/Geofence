@@ -78,8 +78,8 @@
                             "edit": {
                                 "type": "Select",
 								"options": [
-									{"caption": "AbsentX", "value": false},
-									{"caption": "PresentX", "value": true}
+									{"caption": "Absent", "value": false},
+									{"caption": "Present", "value": true}
 								]
                             }
                         },
