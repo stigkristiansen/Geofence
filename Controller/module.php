@@ -11,9 +11,7 @@ class GeofenceController extends IPSModule {
 
         parent::Create();
         
-        //$this->RegisterPropertyBoolean ("Log", false );
-
-		$this->RegisterPropertyString('Username', '');
+        $this->RegisterPropertyString('Username', '');
 		$this->RegisterPropertyString('Password', '');
 		$this->RegisterPropertyInteger('ArrivalScript1', 0);
 		$this->RegisterPropertyInteger('ArrivalScript2', 0);
@@ -27,7 +25,7 @@ class GeofenceController extends IPSModule {
 		$this->RegisterPropertyString('Users', '');
 
 		$this->RegisterVariableBoolean('Presence', 'Presence', '~Presence');
-		//$this->EnableAction("Presence");
+		
 	}
 
     public function ApplyChanges(){
