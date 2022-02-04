@@ -106,16 +106,47 @@ class GeofenceController extends IPSModule {
 				}
 
 				if(!$found) {
-					$this->SendDebug(__FUNCTION__, sprintf('Removing user "%s"...', $name), 0);
+					$this->SendDebug(__FUNCTION__, sprintf('Removing user "%s"...', $username), 0);
 					
-					IPS_DeleteInstance($existingUserInstanceId);
+					$this->Delete($existingUserInstanceId);
 					
-					$this->SendDebug(__FUNCTION__, sprintf('Removed user "%s"', $name), 0);
+					$this->SendDebug(__FUNCTION__, sprintf('Removed user "%s"', $username), 0);
 				}
 			}
 		}
 
 		$this->SendDebug(__FUNCTION__, 'Done updating users', 0);
+	}
+
+	private function Delete(int $ObjectId) {
+		$children = IPS_GetChildrenIDs($ObjectId);
+		foreach($children as $child) {
+			Delete($child);
+		}
+	
+		switch(IPS_GetObject($ObjectId)['ObjectType']) {
+			case 0: // Category   
+				IPS_DeleteCategory($ObjectId);
+				break;
+			case 1: // Instance
+				IPS_DeleteInstance($ObjectId);
+				break;
+			case 2: // Variable
+				IPS_DeleteVariable($ObjectId);
+				break;
+			case 3: // Script
+				IPS_DeleteScript($ObjectId);
+				break;
+			case 4: // Event
+				IPS_DeleteEvent($ObjectId);
+				break;
+			case 5: // Media
+				IPS_DeleteMedia($ObjectId);
+				break;
+			case 6: // Link
+				IPS_DeleteLink($ObjectId);
+				break;
+		}
 	}
 
     public function HandleWebData() {
