@@ -73,7 +73,7 @@
 						{
                             "caption": "Presence",
                             "name": "Presence",
-                            "width": "50px",
+                            "width": "75px",
                             "add": true,
                             "edit": {
                                 "type": "Select",
