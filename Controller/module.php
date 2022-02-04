@@ -27,7 +27,7 @@ class GeofenceController extends IPSModule {
 		$this->RegisterPropertyString('Users', '');
 
 		$this->RegisterVariableBoolean('Presence', 'Presence', '~Presence');
-		$this->EnableAction("Presence");
+		//$this->EnableAction("Presence");
 	}
 
     public function ApplyChanges(){
@@ -151,7 +151,7 @@ class GeofenceController extends IPSModule {
 		$cmd="";
 		$userId="";
 		
-		$this->SendDebug(__FUNCTION__, 'Received the following query parameters: '.json_encode($_GET), 0);
+		$this->SendDebug(__FUNCTION__, sprintf('Received the following query parameters: %s',json_encode($_GET)), 0);
 		
 		if (array_key_exists('cmd', $_GET))
 			$cmd=strtolower($_GET['cmd']);
@@ -162,22 +162,23 @@ class GeofenceController extends IPSModule {
 			$userId=strtolower($_GET['id']);
 		
 		if($cmd!="" && $userId!="") {
-			$this->SendDebug(__FUNCTION__, 'Received the command "'.$cmd.'" for user "'.IPS_GetName($userId).'"', 0);
-			
-			$children = IPS_GetChildrenIDs($this->InstanceID);
-			
-			$users=IPS_GetInstanceListByModuleID('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
-			$size=sizeof($users);
-			
+			$msg = sprintf('Received the command "%s" for user with id "%d"', $cmd, $userId);
+			$this->SendDebug(__FUNCTION__, $msg, 0);
+			IPS_LogMessage('Geofence', $msg);
+
+			$userIds=IPS_GetInstanceListByModuleID('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
+						
 			$userExists = false;
-			for($x=0;$x<$size;$x++) {
-				if($children[$x]==$userId) {
+			foreach($usersIds as $id) {
+				if($id==$userId) {
 					$userExists=true;
 					break;
 				}
 			}
 			
 			if($userExists) {
+				$this->SendDebug(__FUNCTION__, sprintf('User with id is "%s"', IPS_GetName($userId)), 0);
+				
 				switch($cmd) {
 					case 'arrival1':
 						$presence = true;
@@ -226,9 +227,10 @@ class GeofenceController extends IPSModule {
 					$this->SetValue('Presence', $commonPresence);
 					$this->SendDebug(__FUNCTION__, 'Updated Common Presence to "'.$this->GetProfileValueName(IPS_GetVariable($commonPresenceId)['VariableProfile'], $commonPresence).'"', 0);
 				} else
-				$this->SendDebug(__FUNCTION__, 'Presence update is not enabled for this command.', 0);
+					$this->SendDebug(__FUNCTION__, 'Presence update is not enabled for this command.', 0);
 				
 				$scriptId = $this->ReadPropertyInteger($scriptProperty);
+			
 				if($scriptId>0) { 
 					$this->SendDebug(__FUNCTION__, 'The script is "'.IPS_GetName($scriptId).'"', 0);
 					
@@ -247,7 +249,7 @@ class GeofenceController extends IPSModule {
 						if(array_key_exists('delay', $_GET) && is_numeric($_GET['delay'])) {
 							$delay = (int)$_GET['delay'];
 							if($delay>0) {
-								$this->SendDebug(__FUNCTION__, 'Running script with '.$delay.' seconds delay...', 0);
+								$this->SendDebug(__FUNCTION__, sprintf('Running script with %d seconds delay...', $delay), 0);
 								$scriptContent = IPS_GetScriptContent($scriptId);
 								$scriptModification =  "//Do not modify this line or the line below\nIPS_SetScriptTimer(\$_IPS['SELF'],0);\n//Do not modify this line or the line above\n";
 								if(strripos($scriptContent, $scriptModification)===false) {
@@ -267,17 +269,16 @@ class GeofenceController extends IPSModule {
 							IPS_RunScript($scriptId);
 						}
 					} else
-					$this->SendDebug(__FUNCTION__, $message, 0);				
+						$this->SendDebug(__FUNCTION__, $message, 0);				
 				} else 
 					$this->SendDebug(__FUNCTION__, 'No script is selected for this command', 0);
 				
-				echo "OK";
+				echo "The request is processed";
 			
 			} else
-			$this->SendDebug(__FUNCTION__, 'Unknown user', 0);
-			
+				$this->SendDebug(__FUNCTION__, 'Unknown user', 0);
 		} else
-		$this->SendDebug(__FUNCTION__, 'Invalid or missing "id" or "cmd" in URL', 0);
+			$this->SendDebug(__FUNCTION__, 'Invalid or missing "id" or "cmd" in URL', 0);
 		
 		$this->Unlock("HandleWebData");
     }

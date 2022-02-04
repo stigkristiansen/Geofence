@@ -9,35 +9,26 @@ class GeofenceUser extends IPSModule {
 		$this->RegisterPropertyBoolean ("Enabled", true);
 
 		$this->RegisterVariableBoolean('Presence', 'Presence', '~Presence');
-		$this->EnableAction("Presence");
 	}
 
     public function ApplyChanges(){
         parent::ApplyChanges();
-
     }
 
 	public function GetURLs() {
-		$parent = IPS_GetParent($this->InstanceID);
-		$allParents = IPS_GetInstanceListByModuleID("{C5271BF2-DDC9-4EA7-8467-A8C645500263}");
+		$instances = IPS_GetInstanceListByModuleID("{C5271BF2-DDC9-4EA7-8467-A8C645500263}");
 		
-		$size=sizeof($allParents);
-		$foundParent = false;
-		for($x=0;$x<$size;$x++) {
-			if($allParents[$x]==$parent) {
-				$foundParent = true;
-				break;
-			}
-		}
-		
-		if($foundParent) {
-			$message = "/hook/geofence".$parent."?cmd=arrival1&id=".$this->InstanceID."\n";
-			$message .= "/hook/geofence".$parent."?cmd=arrival2&id=".$this->InstanceID."\n";
-			$message .= "/hook/geofence".$parent."?cmd=departure1&id=".$this->InstanceID."\n";
-			$message .= "/hook/geofence".$parent."?cmd=departure2&id=".$this->InstanceID."\n\n";
+		if(count($instances)>0) {
+			$controller = $instances[0];
+
+			$message = "/hook/geofence".$controller."?cmd=arrival1&id=".$this->InstanceID."\n";
+			$message .= "/hook/geofence".$controller."?cmd=arrival2&id=".$this->InstanceID."\n";
+			$message .= "/hook/geofence".$controller."?cmd=departure1&id=".$this->InstanceID."\n";
+			$message .= "/hook/geofence".$controller."?cmd=departure2&id=".$this->InstanceID."\n\n";
 			$message .= "The parameter \"delay\" (in seconds) is optional for all commands.";
-		} else
-			$message = "The user does not have a Geofence Controller as parent!";
+		} else {
+			$message = "The Geofence Controller is missing!";
+		}
 		
 		return $message;
 	}
