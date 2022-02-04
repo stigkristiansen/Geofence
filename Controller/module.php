@@ -92,6 +92,9 @@ class GeofenceController extends IPSModule {
 
 			$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 
+			$this->SendDebug(__FUNCTION__, sprintf('Existing users: %s', json_encode($existingUserInstanceIds)), 0);
+			$this->SendDebug(__FUNCTION__, sprintf('Users in list: %s', json_encode($userList)), 0);
+
 			foreach($existingUserInstanceIds as $existingUserInstanceId) {
 				$found = false;
 				foreach($userList as $user) {
