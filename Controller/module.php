@@ -96,9 +96,10 @@ class GeofenceController extends IPSModule {
 			$this->SendDebug(__FUNCTION__, sprintf('Users in list: %s', json_encode($userList)), 0);
 
 			foreach($existingUserInstanceIds as $existingUserInstanceId) {
+				$username = IPS_GetProperty($existingUserInstanceId, 'Username');
 				$found = false;
 				foreach($userList as $user) {
-					if($user['InstanceId'] == $existingUserInstanceId) {
+					if($user['Username'] == $username) {
 						$found = true;
 						break;
 					}
