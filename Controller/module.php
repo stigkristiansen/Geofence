@@ -36,8 +36,15 @@ class GeofenceController extends IPSModule {
 		$name="Geofence".$this->InstanceID."Hook";
 		$scriptId = $this->RegisterScript($ident, $name, "<?\n//Do not modify!\nrequire_once(IPS_GetKernelDirEx().\"scripts/__ipsmodule.inc.php\");\nrequire_once(\"../modules/Geofence/Controller/module.php\");\n(new GeofenceController(".$this->InstanceID."))->HandleWebData();\n?>");
 		$this->RegisterWebHook("/hook/".$ident, $scriptId);
-						
-		$this->UpdateUsers();	
+		
+		$list = $this->ReadPropertyString('Users');
+		if(strlen($list)>0) {
+			$this->UpdateUsers($list);	
+			
+			IPS_SetProperty($this->InstanceID, 'Users', '');
+			IPS_ApplyChanges($this->InstanceID);
+		}
+		
     }
 
 	public  function GetConfigurationForm ( )  { 
@@ -83,11 +90,11 @@ class GeofenceController extends IPSModule {
 		return json_encode($form);
 	}
 
-	private function UpdateUsers() {
+	private function UpdateUsers(string $List) {
 		$this->SendDebug(__FUNCTION__, 'Updating users...', 0);
 
-		$list = $this->ReadPropertyString('Users');
-		if(strlen($list)>0) {
+		//$list = $this->ReadPropertyString('Users');
+		if(strlen($List)>0) {
 			$userList = json_decode($list, true);
 						
 			foreach($userList as $user) {
