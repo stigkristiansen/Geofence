@@ -87,6 +87,7 @@
                             "caption": "Enabled",
                             "name": "Enabled",
                             "width": "75px",
+							"align ": "center",
                             "add": true,
                             "edit": {
                                 "type": "CheckBox"
