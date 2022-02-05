@@ -6,7 +6,7 @@
     "actions":
     [
         {"type": "Label", "label": "Show URL and parameters" },
-		{"type": "Button", "label": "Show", "onClick": "echo GEOU_GetURLs($id);" }
+		{"type": "Button", "label": "Show", "onClick": "echo GEO_GetURLs($id);" }
     ]
 
 }
