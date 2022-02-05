@@ -237,7 +237,7 @@ class GeofenceController extends IPSModule {
 			$userIds=IPS_GetInstanceListByModuleID('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 						
 			$userExists = false;
-			foreach($usersIds as $id) {
+			foreach($userIds as $id) {
 				if($id==$userId) {
 					$userExists=true;
 					break;
