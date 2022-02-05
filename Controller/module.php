@@ -40,7 +40,7 @@ class GeofenceController extends IPSModule {
 		$list = $this->ReadPropertyString('Users');
 		if(strlen($list)>0) {
 			$this->UpdateUsers($list);	
-			
+
 			IPS_SetProperty($this->InstanceID, 'Users', '');
 			IPS_ApplyChanges($this->InstanceID);
 		}
@@ -95,7 +95,7 @@ class GeofenceController extends IPSModule {
 
 		//$list = $this->ReadPropertyString('Users');
 		if(strlen($List)>0) {
-			$userList = json_decode($list, true);
+			$userList = json_decode($List, true);
 						
 			foreach($userList as $user) {
 				if($user['InstanceId']==0) {
