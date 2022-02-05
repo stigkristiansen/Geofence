@@ -97,6 +97,7 @@ class GeofenceController extends IPSModule {
 		if(strlen($List)>0) {
 			$userList = json_decode($List, true);
 						
+			
 			foreach($userList as $user) {
 				if($user['InstanceId']==0) {
 					$this->SendDebug(__FUNCTION__, sprintf('Adding new user "%s"...', $user['Username']), 0);
