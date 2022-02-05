@@ -287,7 +287,7 @@ class GeofenceController extends IPSModule {
 					$commonPresence = false;
 					foreach($userIds as $id) {
 						if(IPS_GetProperty($id, 'Enabled')) {
-							$presenceId=IPS_GetVariableIDByIdent ('Presence', $id);
+							$presenceId=IPS_GetObjectIDByIdent  ('Presence', $id);
 							if(GetValue($presenceId)) {
 								$commonPresence = true;
 								break;
