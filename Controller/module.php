@@ -57,12 +57,14 @@ class GeofenceController extends IPSModule {
 		$this->SendDebug(__FUNCTION__, 'Building users list...', 0);
 		$users = [];
 		foreach($userInstanceIds as $userInstanceId) {
+			$username = IPS_GetName($userInstanceId)
+			$this->SendDebug(__FUNCTION__, sprintf('Added user %s', $username), 0);
 			$presenceId = IPS_GetObjectIDByIdent('Presence', $userInstanceId);
 			$presence = true;
 			if($presenceId!==false) {
 				$presence = GetValue($presenceId);
 			} 
-			$users[] = ['Username' => IPS_GetName($userInstanceId), 'Enabled' => IPS_GetProperty($userInstanceId, 'Enabled'),
+			$users[] = ['Username' => $username, 'Enabled' => IPS_GetProperty($userInstanceId, 'Enabled'),
 						'Presence' => $presence, 'InstanceId' => $userInstanceId
 					   ];
 		}
@@ -97,7 +99,7 @@ class GeofenceController extends IPSModule {
 		if(strlen($List)>0) {
 			$userList = json_decode($List, true);
 						
-			
+
 			foreach($userList as $user) {
 				if($user['InstanceId']==0) {
 					$this->SendDebug(__FUNCTION__, sprintf('Adding new user "%s"...', $user['Username']), 0);
