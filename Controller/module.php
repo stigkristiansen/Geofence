@@ -57,7 +57,7 @@ class GeofenceController extends IPSModule {
 		$this->SendDebug(__FUNCTION__, 'Building users list...', 0);
 		$users = [];
 		foreach($userInstanceIds as $userInstanceId) {
-			$username = IPS_GetName($userInstanceId)
+			$username = IPS_GetName($userInstanceId);
 			$this->SendDebug(__FUNCTION__, sprintf('Added user %s', $username), 0);
 			$presenceId = IPS_GetObjectIDByIdent('Presence', $userInstanceId);
 			$presence = true;
