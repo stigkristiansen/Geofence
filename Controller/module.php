@@ -25,7 +25,7 @@ class GeofenceController extends IPSModule {
 		$this->RegisterPropertyString('Users', '');
 
 		$this->RegisterVariableBoolean('Presence', 'Presence', '~Presence');
-		$this->EnableAction('Presence');
+		//$this->EnableAction('Presence');
 		
 	}
 
@@ -124,6 +124,7 @@ class GeofenceController extends IPSModule {
 				}
 			}
 
+			
 			$this->SendDebug(__FUNCTION__, 'Removing unused users...', 0);
 
 			$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
