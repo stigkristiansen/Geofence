@@ -124,7 +124,6 @@ class GeofenceController extends IPSModule {
 				}
 			}
 
-			
 			$this->SendDebug(__FUNCTION__, 'Removing unused users...', 0);
 
 			$existingUserInstanceIds = IPS_GetInstanceListByModuleID ('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
