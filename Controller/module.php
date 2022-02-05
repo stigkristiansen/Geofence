@@ -64,14 +64,17 @@ class GeofenceController extends IPSModule {
 			$profile = IPS_GetVariable($this->GetIDForIdent('Presence'))['VariableProfile'];
 		}
 
-		$selectOptions[] = [
-			"caption" => $this->GetProfileValueName($profile, true), 'value' => true
-		];
-		$selectOptions[] = [
-			"caption" => $this->GetProfileValueName($profile, false), 'value' => false
-		];
-
-		$form['elements'][1]['items'][9]['columns'][1]['edit']['options'] = $selectOptions;
+		if(strlen($profile)>0) {
+			$selectOptions[] = [
+				"caption" => $this->GetProfileValueName($profile, true), 'value' => true
+			];
+			$selectOptions[] = [
+				"caption" => $this->GetProfileValueName($profile, false), 'value' => false
+			];
+	
+			$form['elements'][1]['items'][9]['columns'][1]['edit']['options'] = $selectOptions;
+		}
+		
 		$form['elements'][1]['items'][9]['values'] = $users;
 		
 		$this->SendDebug(__FUNCTION__, 'Done creating form', 0);
@@ -92,6 +95,8 @@ class GeofenceController extends IPSModule {
 					$newUserId = IPS_CreateInstance('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 					IPS_SetName($newUserId, $user['Username']);
 					IPS_SetParent($newUserId, $this->InstanceID);
+					IPS_SetProperty($newUserId, $user['Enabled']);
+					IPS_ApplyChanges($newUserId);
 					$presenceId = IPS_GetObjectIDByIdent('Presence', $newUserId);
 					SetValue($presenceId, $user['Presence']);
 				} else if(IPS_InstanceExists($user['InstanceId'])){
@@ -241,103 +246,109 @@ class GeofenceController extends IPSModule {
 			
 			if($userExists) {
 				$this->SendDebug(__FUNCTION__, sprintf('User with id is "%s"', IPS_GetName($userId)), 0);
-				
-				switch($cmd) {
-					case 'arrival1':
-						$presence = true;
-						$scriptProperty = 'ArrivalScript1';
-						break;
-					case 'arrival2':
-						$presence = true;
-						$scriptProperty = 'ArrivalScript2';
-						break;
-					case 'departure1':
-						$presence = false;
-						$scriptProperty = 'DepartureScript1';
-						break;
-					case 'departure2':
-						$presence = false;
-						$scriptProperty = 'DepartureScript2';
-						break;
-					default:
-					$this->SendDebug(__FUNCTION__, 'Invalid command!', 0);
-						$this->Unlock("HandleWebData");
-						return;
-				}
-				
-				$presenceId=IPS_GetVariableIDByName ('Presence', $userId);
-				$commonPresenceId=$this->GetIdForIdent('Presence');
-				
-				$lastCommonPresence=$this->GetValue('Presence');
-				
-				$updatePresence=$this->ReadPropertyBoolean($scriptProperty."Update");
-				
-				if($updatePresence) {
-					$this->SendDebug(__FUNCTION__, 'Updated Presence for user "'.IPS_GetName($userId).'" to "'.$this->GetProfileValueName(IPS_GetVariable($presenceId)['VariableProfile'], $presence).'"', 0);
-					SetValue($presenceId, $presence);
-				}
-				
-				$commonPresence = false;
-				for($x=0;$x<$size;$x++){
-					$presenceId=IPS_GetVariableIDByName ('Presence', $users[$x]);
-					if(GetValue($presenceId)) {
-						$commonPresence = true;
-						break;
-					}
-				}
-				
-				if($updatePresence) {
-					$this->SetValue('Presence', $commonPresence);
-					$this->SendDebug(__FUNCTION__, 'Updated Common Presence to "'.$this->GetProfileValueName(IPS_GetVariable($commonPresenceId)['VariableProfile'], $commonPresence).'"', 0);
-				} else
-					$this->SendDebug(__FUNCTION__, 'Presence update is not enabled for this command.', 0);
-				
-				$scriptId = $this->ReadPropertyInteger($scriptProperty);
-			
-				if($scriptId>0) { 
-					$this->SendDebug(__FUNCTION__, 'The script is "'.IPS_GetName($scriptId).'"', 0);
-					
-					$runScript = true;
-					if($updatePresence && $presence==$lastCommonPresence) {
-						$runScript = false;
-						$message = 'Old Presence and new Presence is equal. Skipping script';
-					}
-									
-					if($updatePresence && !$presence && $commonPresence) {
-						$runScript = false;
-						$message='Not all users have sent a departure command. Skipping script';
+
+				if(IPS_GetProperty($userId, 'Enabled')) {
+					$this->SendDebug(__FUNCTION__, 'The user is enabled. Continuing...', 0);
+					switch($cmd) {
+						case 'arrival1':
+							$presence = true;
+							$scriptProperty = 'ArrivalScript1';
+							break;
+						case 'arrival2':
+							$presence = true;
+							$scriptProperty = 'ArrivalScript2';
+							break;
+						case 'departure1':
+							$presence = false;
+							$scriptProperty = 'DepartureScript1';
+							break;
+						case 'departure2':
+							$presence = false;
+							$scriptProperty = 'DepartureScript2';
+							break;
+						default:
+						$this->SendDebug(__FUNCTION__, 'Invalid command!', 0);
+							$this->Unlock("HandleWebData");
+							return;
 					}
 					
-					if($runScript) {					
-						if(array_key_exists('delay', $_GET) && is_numeric($_GET['delay'])) {
-							$delay = (int)$_GET['delay'];
-							if($delay>0) {
-								$this->SendDebug(__FUNCTION__, sprintf('Running script with %d seconds delay...', $delay), 0);
-								$scriptContent = IPS_GetScriptContent($scriptId);
-								$scriptModification =  "//Do not modify this line or the line below\nIPS_SetScriptTimer(\$_IPS['SELF'],0);\n//Do not modify this line or the line above\n";
-								if(strripos($scriptContent, $scriptModification)===false) {
-									$splitPos = strpos($scriptContent, "?>");
-									$scriptPart1 = substr($scriptContent, 0, $splitPos);
-									$scriptPart2 = substr($scriptContent, $splitPos);
-									$scriptContent = $scriptPart1.$scriptModification.$scriptPart2;
-									IPS_SetScriptContent($scriptId, $scriptContent);
+					$presenceId=IPS_GetVariableIDByName ('Presence', $userId);
+					//$commonPresenceId=$this->GetIdForIdent('Presence');
+					
+					$lastCommonPresence=$this->GetValue('Presence');
+					
+					$updatePresence=$this->ReadPropertyBoolean($scriptProperty."Update");
+					
+					if($updatePresence) {
+						$this->SendDebug(__FUNCTION__, 'Updated Presence for user "'.IPS_GetName($userId).'" to "'.$this->GetProfileValueName(IPS_GetVariable($presenceId)['VariableProfile'], $presence).'"', 0);
+						SetValue($presenceId, $presence);
+					}
+					
+					$commonPresence = false;
+					for($x=0;$x<$size;$x++){
+						if(IPS_GetProperty($users[$x], 'Enabled')) {
+							$presenceId=IPS_GetVariableIDByIdent ('Presence', $users[$x]);
+							if(GetValue($presenceId)) {
+								$commonPresence = true;
+								break;
+							}
+						}
+					}
+					
+					if($updatePresence) {
+						$this->SetValue('Presence', $commonPresence);
+						$this->SendDebug(__FUNCTION__, 'Updated Common Presence to "'.$this->GetProfileValueName(IPS_GetVariable($commonPresenceId)['VariableProfile'], $commonPresence).'"', 0);
+					} else
+						$this->SendDebug(__FUNCTION__, 'Presence update is not enabled for this command.', 0);
+					
+					$scriptId = $this->ReadPropertyInteger($scriptProperty);
+				
+					if($scriptId>0) { 
+						$this->SendDebug(__FUNCTION__, 'The script is "'.IPS_GetName($scriptId).'"', 0);
+						
+						$runScript = true;
+						if($updatePresence && $presence==$lastCommonPresence) {
+							$runScript = false;
+							$message = 'Old Presence and new Presence is equal. Skipping script';
+						}
+										
+						if($updatePresence && !$presence && $commonPresence) {
+							$runScript = false;
+							$message='Not all users have sent a departure command. Skipping script';
+						}
+						
+						if($runScript) {					
+							if(array_key_exists('delay', $_GET) && is_numeric($_GET['delay'])) {
+								$delay = (int)$_GET['delay'];
+								if($delay>0) {
+									$this->SendDebug(__FUNCTION__, sprintf('Running script with %d seconds delay...', $delay), 0);
+									$scriptContent = IPS_GetScriptContent($scriptId);
+									$scriptModification =  "//Do not modify this line or the line below\nIPS_SetScriptTimer(\$_IPS['SELF'],0);\n//Do not modify this line or the line above\n";
+									if(strripos($scriptContent, $scriptModification)===false) {
+										$splitPos = strpos($scriptContent, "?>");
+										$scriptPart1 = substr($scriptContent, 0, $splitPos);
+										$scriptPart2 = substr($scriptContent, $splitPos);
+										$scriptContent = $scriptPart1.$scriptModification.$scriptPart2;
+										IPS_SetScriptContent($scriptId, $scriptContent);
+									}
+									IPS_SetScriptTimer($scriptId, $delay);
+								} else {
+									$this->SendDebug(__FUNCTION__, 'Running script...', 0);
+									IPS_RunScript($scriptId);
 								}
-								IPS_SetScriptTimer($scriptId, $delay);
 							} else {
 								$this->SendDebug(__FUNCTION__, 'Running script...', 0);
 								IPS_RunScript($scriptId);
 							}
-						} else {
-							$this->SendDebug(__FUNCTION__, 'Running script...', 0);
-							IPS_RunScript($scriptId);
-						}
-					} else
-						$this->SendDebug(__FUNCTION__, $message, 0);				
-				} else 
-					$this->SendDebug(__FUNCTION__, 'No script is selected for this command', 0);
-				
-				echo "The request is processed";
-			
+						} else
+							$this->SendDebug(__FUNCTION__, $message, 0);				
+					} else 
+						$this->SendDebug(__FUNCTION__, 'No script is selected for this command', 0);
+					
+					echo "The request is processed";
+				} else {
+					$this->SendDebug(__FUNCTION__, 'The user is disabled!', 0);
+				}
 			} else
 				$this->SendDebug(__FUNCTION__, 'Unknown user', 0);
 		} else
