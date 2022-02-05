@@ -285,9 +285,9 @@ class GeofenceController extends IPSModule {
 					}
 					
 					$commonPresence = false;
-					for($x=0;$x<$size;$x++){
-						if(IPS_GetProperty($users[$x], 'Enabled')) {
-							$presenceId=IPS_GetVariableIDByIdent ('Presence', $users[$x]);
+					foreach($userIds as $id) {
+						if(IPS_GetProperty($id, 'Enabled')) {
+							$presenceId=IPS_GetVariableIDByIdent ('Presence', $id);
 							if(GetValue($presenceId)) {
 								$commonPresence = true;
 								break;
@@ -297,7 +297,7 @@ class GeofenceController extends IPSModule {
 					
 					if($updatePresence) {
 						$this->SetValue('Presence', $commonPresence);
-						$this->SendDebug(__FUNCTION__, 'Updated Common Presence to "'.$this->GetProfileValueName(IPS_GetVariable($commonPresenceId)['VariableProfile'], $commonPresence).'"', 0);
+						$this->SendDebug(__FUNCTION__, 'Updated Common Presence to "'.$this->GetProfileValueName(IPS_GetVariable($this->GetIdForIdent('Presence'))['VariableProfile'], $commonPresence).'"', 0);
 					} else
 						$this->SendDebug(__FUNCTION__, 'Presence update is not enabled for this command.', 0);
 					
