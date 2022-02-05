@@ -95,7 +95,7 @@ class GeofenceController extends IPSModule {
 					$newUserId = IPS_CreateInstance('{C4A1F68D-A34E-4A3A-A5EC-DCBC73532E2C}');
 					IPS_SetName($newUserId, $user['Username']);
 					IPS_SetParent($newUserId, $this->InstanceID);
-					IPS_SetProperty($newUserId, $user['Enabled']);
+					IPS_SetProperty($newUserId, 'Enabled', $user['Enabled']);
 					IPS_ApplyChanges($newUserId);
 					$presenceId = IPS_GetObjectIDByIdent('Presence', $newUserId);
 					SetValue($presenceId, $user['Presence']);
@@ -245,7 +245,7 @@ class GeofenceController extends IPSModule {
 			}
 			
 			if($userExists) {
-				$this->SendDebug(__FUNCTION__, sprintf('User with id is "%s"', IPS_GetName($userId)), 0);
+				$this->SendDebug(__FUNCTION__, sprintf('The user is "%s"', IPS_GetName($userId)), 0);
 
 				if(IPS_GetProperty($userId, 'Enabled')) {
 					$this->SendDebug(__FUNCTION__, 'The user is enabled. Continuing...', 0);
